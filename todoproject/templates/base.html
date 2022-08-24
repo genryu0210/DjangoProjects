@@ -11,8 +11,12 @@
     <title>Hello, world!</title>
   </head>
   <body>
-  {% block header %}
-  {% endblock header %}
+{% block header%}
+  <div class="mt-4 p-5 bg-secondary text-white rounded mb-2">
+    <h1>Todo List</h1>
+    <p>Todoリストを作成して生産的な毎日を過ごしましょう</p>
+  </div>
+{% endblock header %}
   {% block content %}
   {% endblock content %}
 

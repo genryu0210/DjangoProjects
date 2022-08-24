@@ -16,6 +16,7 @@ class TodoList(ListView):
 class TodoDetail(DetailView):
     template_name = 'detail.html'
     model = TodoModel
+    success_url = reverse_lazy("list")
 
 class TodoCreate(CreateView):
     template_name = 'create.html'
@@ -29,4 +30,7 @@ class TodoDelete(DeleteView):
     success_url = reverse_lazy("list")
 
 class TodoUpdate(UpdateView):
-    template_name = ''
+    template_name = 'update.html'
+    model = TodoModel
+    fields = ("title", "memo", "priority", "duedate")
+    success_url = reverse_lazy("list")

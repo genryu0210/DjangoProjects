@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header%}
-  <div class="mt-4 p-5 bg-primary text-white rounded">
+  <div class="mt-4 p-5 bg-secondary text-white rounded mb-2">
     <h1>Todo List</h1>
     <p>Todoリストを作成して生産的な毎日を過ごしましょう</p>
   </div>
@@ -9,12 +9,13 @@
 
 {% block content %}
 <div class="container">
+    <a href="{% url 'create' %}" class="btn btn-primary active mb-2" tabindex="-1" role="button" aria-disabled="true">新規作成</a>
     {% for item in object_list %}
     <div class="alert alert-{{ item.priority }}" role="alert">
-        <p>{{item.title}}</p>
-        <a href="#" class="btn btn-primary active " tabindex="-1" role="button" aria-disabled="true">編集画面へ</a>
-        <a href="#" class="btn btn-secondary " tabindex="-1" role="button" aria-disabled="true">削除画面へ</a>
-        <a href="#" class="btn btn-primary" tabindex="-1" role="button" aria-disabled="true">詳細画面へ</a>
+        <p>{{item.title}} 期日: {{item.duedate | date:'F d l'}}</p>
+        <a href="{% url 'update' item.pk %}" class="btn btn-primary active " tabindex="-1" role="button" aria-disabled="true">編集画面へ</a>
+        <a href="{% url 'delete' item.pk %}" class="btn btn-secondary " tabindex="-1" role="button" aria-disabled="true">削除画面へ</a>
+        <a href="{% url 'detail' item.pk %}" class="btn btn-primary" tabindex="-1" role="button" aria-disabled="true">詳細画面へ</a>
     </div>
 
     {% endfor %}
