@@ -8,11 +8,15 @@
 
 {% block content %}
 <div class="container">
+    {% for item in object_list %}
     <div class="alert alert-success" role="alert">
-        <p>title</p>
-        <p>投稿者</p>
-        <a href="#" class="btn btn-primary " tabindex="-1" role="button" aria-disabled="true">Primary link</a>
-    <a href="#" class="btn btn-secondary " tabindex="-1" role="button" aria-disabled="true">Link</a>
+        <p>タイトル：<a href="{% url 'detail' item.pk %}">{{item.title}}</a> </p>
+        <p>投稿者：{{item.author}}</p>
+        <a href="#" class="btn btn-primary disabled"  tabindex="-1" role="button" aria-disabled="true">いいね {{ item.good }}</a>
+    <a href="#" class="btn btn-secondary disabled "  tabindex="-1" role="button" aria-disabled="true">既読 {{ item.read }}</a>
+    </div>
+    {% endfor %}
+    <a href="{% url 'logout' %}" class="btn btn-danger">Log out</a>
 </div>
-</div>
+
 {% endblock content %}

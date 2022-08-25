@@ -1,7 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from .models import BoardModel
+from django.contrib.auth.decorators import login_required
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
+
 
 def signupfunc(request):
     if request.method == "POST":
@@ -9,10 +14,11 @@ def signupfunc(request):
         password = request.POST['password']
         try:
             user = User.objects.create_user(username, "", password)
-            return render(request, 'signup.html', {"some": "100"})
+            return redirect('list')
         except IntegrityError:
             return render(request, 'signup.html', {'error': 'このユーザーは既に登録されています。'})
     return render(request, 'signup.html')
+
 
 def loginfunc(request):
     if request.method == "POST":
@@ -21,11 +27,47 @@ def loginfunc(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return render(request, 'login.html', {"context": "logged in"})
+            return redirect('list')
         else:
-            return render(request, 'login.html', {"context": "not logged in"})
-    return render(request, 'login.html', {"context": "get method"})
+            return render(request, 'login.html', {"context": "IDもしくはパスワードが間違っています"})
+    return render(request, 'login.html')
 
+
+@login_required(redirect_field_name='signup')
 def listfunc(request):
+    object_list = BoardModel.objects.all()
+    return render(request, "list.html", {'object_list': object_list})
 
-    return render(request, "list.html")
+
+def logoutfunc(request):
+    logout(request)
+    return redirect('login')
+
+
+def detailfunc(request, pk):
+    object = get_object_or_404(BoardModel, pk=pk)
+    return render(request, 'detail.html', {'object': object})
+
+
+def goodfunc(request, pk):
+    object = BoardModel.objects.get(pk=pk)
+    object.good = object.good + 1
+    object.save()
+    return redirect('list')
+
+def readfunc(request, pk):
+    object = BoardModel.objects.get(pk=pk)
+    username = request.user.get_username()
+    if username in object.readtext:
+        return redirect('list')
+    else:
+        object.read = object.read + 1
+        object.readtext = object.readtext + '' + username
+        object.save()
+        return redirect('list')
+
+class BoardCreate(CreateView):
+    template_name = 'create.html'
+    model = BoardModel
+    fields = ('title', 'context', 'author', 'snsimage')
+    success_url = reverse_lazy('list')
