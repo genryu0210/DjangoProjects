@@ -8,4 +8,5 @@
     <p>{{ diary.date }} {{ diary.title }} を削除します</p>
     <input type="submit" value="削除">
 </form>
+    <a href="{% url 'diary:index' %}">戻る</a>
 {% endblock content %}

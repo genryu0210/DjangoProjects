@@ -45,7 +45,11 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'crispy_forms',
+
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 SITE_ID = 1
 
@@ -145,10 +149,10 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend'  # メールアドレスとパスワードの両方を用いて認証するために必要
 )
 
-ACCOUNT_AUTHENTICATION_METHOD = 'email'  # メールアドレス（とパスワードで）認証する
+ACCOUNT_AUTHENTICATION_METHOD = 'username'  # メールアドレス（とパスワードで）認証する
 ACCOUNT_USERNAME_REQUIRED = True  # サインアップ（ユーザー登録）の時にユーザーネームを尋ねる
 ACCOUNT_EMAIL_REQUIRED = True  # サインアップ（ユーザー登録）の時にメールアドレスを尋ねる
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # メール検証を必須とする
+ACCOUNT_EMAIL_VERIFICATION = 'option'  # メール検証を必須とする
 
 LOGIN_URL = '/account/login/'  # ログインURLの設定
 LOGIN_REDIRECT_URL = '/index/'  # ログイン後のリダイレクト先
